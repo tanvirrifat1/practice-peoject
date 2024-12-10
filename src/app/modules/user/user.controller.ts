@@ -15,13 +15,13 @@ const createBrand = catchAsync(async (req, res) => {
 });
 
 const createInfluencer = catchAsync(async (req, res) => {
-  const result = await UserService.createInstructor(req.body);
+  await UserService.createInstructor(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Influencer created successfully',
-    data: result,
+    message:
+      'Please check your email to verify your account. We have sent you an OTP to complete the registration process.',
   });
 });
 

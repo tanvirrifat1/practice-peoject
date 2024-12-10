@@ -113,6 +113,33 @@ const createInstructor = async (payload: Partial<TUser & IInfluencer>) => {
       throw new AppError(httpStatus.BAD_REQUEST, 'Failed to create user');
     }
 
+    const otp = generateOTP();
+
+    const values = {
+      name: user.name,
+      email: user.email,
+      otp: otp,
+    };
+
+    const accountMail = emailTemplate.createAccount(values);
+
+    emailHelper.sendEmail(accountMail);
+
+    const auth = {
+      oneTimeCode: otp,
+      expireAt: new Date(Date.now() + 5 * 60000),
+    };
+
+    const updateUser = await User.findOneAndUpdate(
+      { _id: user._id },
+      { $set: { authentication: auth } },
+      { new: true, session },
+    );
+
+    if (!updateUser) {
+      throw new AppError(httpStatus.BAD_REQUEST, 'Failed to update user');
+    }
+
     await session.commitTransaction();
 
     return user;
