@@ -1,3 +1,4 @@
+import { Model } from 'mongoose';
 import { GENDER } from './influencer.constant';
 
 export type IInfluencer = {
@@ -15,3 +16,9 @@ export type IInfluencer = {
   facebook: string;
   twitter?: string;
 };
+
+export type UpdateInfluencerPayload = Partial<IInfluencer> & {
+  imagesToDelete?: string[];
+};
+
+export type InfluencerModel = Model<IInfluencer>;

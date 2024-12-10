@@ -4,8 +4,6 @@ import sendResponse from '../../../utils/sendResponse';
 import { InfluencerService } from './influencer.service';
 
 const updateInfluencer = catchAsync(async (req, res) => {
-  console.log(req.files);
-
   let image: any = [];
   if (req.files && 'image' in req.files && Array.isArray(req.files.image)) {
     image = req.files.image.map((file) => `/images/${file.filename}`);

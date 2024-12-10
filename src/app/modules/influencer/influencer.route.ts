@@ -9,12 +9,24 @@ const router = express.Router();
 
 router.patch(
   '/update-influencer/:id',
-  fileUploadHandler(),
   auth(USER_ROLES.INFLUENCER),
+  fileUploadHandler(),
   (req: Request, res: Response, next: NextFunction) => {
-    req.body = influencerValidation.influencerSchema.parse(
-      JSON.parse(req.body.data),
-    );
+    const { imagesToDelete, data } = req.body;
+
+    if (!data && imagesToDelete) {
+      req.body = { imagesToDelete };
+      return InfluencerController.updateInfluencer(req, res, next);
+    }
+
+    if (data) {
+      const parsedData = influencerValidation.influencerSchema.parse(
+        JSON.parse(data),
+      );
+
+      req.body = { ...parsedData, imagesToDelete };
+    }
+
     return InfluencerController.updateInfluencer(req, res, next);
   },
 );
