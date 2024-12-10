@@ -3,6 +3,7 @@ import { UserRoute } from '../modules/user/user.route';
 import { AuthRoutes } from '../modules/auth/auth.route';
 import { InfluencerRoute } from '../modules/influencer/influencer.route';
 import { BrandRoutes } from '../modules/brand/brand.route';
+import { PlanRoutes } from '../modules/plan/plan.route';
 
 const router = Router();
 
@@ -22,6 +23,10 @@ const modulesRoutes = [
   {
     path: '/brand',
     route: BrandRoutes,
+  },
+  {
+    path: '/plan',
+    route: PlanRoutes,
   },
 ];
 

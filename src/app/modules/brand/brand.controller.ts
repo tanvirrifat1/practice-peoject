@@ -10,7 +10,12 @@ const updateBrand = catchAsync(async (req, res) => {
     image = `/images/${req.files.image[0].filename}`;
   }
 
-  const result = await BrandService.updateBrand(req.params.id, req.body);
+  const value = {
+    ...req.body,
+    image,
+  };
+
+  const result = await BrandService.updateBrand(req.params.id, value);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -11,6 +11,7 @@ import { Influencer } from '../influencer/influencer.model';
 import generateOTP from '../../ulitis/optGenerate';
 import { emailTemplate } from '../../../shared/emailTemple';
 import { emailHelper } from '../../../shared/emailHelper';
+import { JwtPayload } from 'jsonwebtoken';
 
 const createBrand = async (payload: Partial<TUser & IBrand>) => {
   const session = await startSession();
@@ -150,7 +151,19 @@ const createInstructor = async (payload: Partial<TUser & IInfluencer>) => {
   }
 };
 
+const getProfile = async (user: JwtPayload): Promise<Partial<TUser>> => {
+  const { id } = user;
+
+  const isExistUser = await User.findById(id).populate('brand influencer');
+  if (!isExistUser) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "User doesn't exist!");
+  }
+
+  return isExistUser;
+};
+
 export const UserService = {
   createBrand,
   createInstructor,
+  getProfile,
 };

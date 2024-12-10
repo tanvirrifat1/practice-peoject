@@ -21,18 +21,25 @@ const userSchema = new mongoose.Schema<TUser>(
     password: {
       type: String,
       required: true,
+      select: 0,
+      minlength: 8,
     },
     authentication: {
-      isResetPassword: {
-        type: Boolean,
-        default: false,
+      type: {
+        isResetPassword: {
+          type: Boolean,
+          default: false,
+        },
+        oneTimeCode: {
+          type: Number,
+          default: null,
+        },
+        expireAt: {
+          type: Date,
+          default: null,
+        },
       },
-      oneTimeCode: {
-        type: Number,
-      },
-      expireAt: {
-        type: Date,
-      },
+      select: 0,
     },
     brand: {
       type: mongoose.Schema.Types.ObjectId,
@@ -56,35 +63,37 @@ const userSchema = new mongoose.Schema<TUser>(
   },
 );
 
-userSchema.statics.isExistUserById = async function (id: string) {
-  return this.findById(id);
+userSchema.statics.isExistUserById = async (id: string) => {
+  const isExist = await User.findById(id);
+  return isExist;
 };
 
-userSchema.statics.isExistUserByEmail = async function (email: string) {
-  return this.findOne({ email });
+userSchema.statics.isExistUserByEmail = async (email: string) => {
+  const isExist = await User.findOne({ email });
+  return isExist;
 };
 
-userSchema.statics.isAccountCreated = async function (id: string) {
-  const user = await this.findById(id);
-  return user ? !!user.authentication?.isResetPassword : false;
-};
-
-userSchema.statics.isMatchPassword = async function (
+//is match password
+userSchema.statics.isMatchPassword = async (
   password: string,
   hashPassword: string,
-): Promise<boolean> {
-  return bcrypt.compare(password, hashPassword);
+): Promise<boolean> => {
+  return await bcrypt.compare(password, hashPassword);
 };
 
+//check user
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
-  }
-  const saltRounds = Number(config.bcrypt_Salt_rounds);
-  const hashedPassword = await bcrypt.hash(this.password, saltRounds);
-  this.password = hashedPassword;
+  //check user
+
+  //password hash
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_Salt_rounds),
+  );
   next();
 });
+
+//check user)
 
 // Middleware and other methods...
 

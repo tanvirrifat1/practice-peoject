@@ -40,7 +40,6 @@ const brandSchema = new mongoose.Schema<IBrand>(
     },
     image: {
       type: String,
-      default: 'https://i.ibb.co.com/bNMNQHP/client.jpg',
     },
   },
   {

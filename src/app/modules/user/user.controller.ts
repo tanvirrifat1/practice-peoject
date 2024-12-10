@@ -25,7 +25,21 @@ const createInfluencer = catchAsync(async (req, res) => {
   });
 });
 
+const getProfile = catchAsync(async (req, res) => {
+  const user = req.user;
+
+  const result = await UserService.getProfile(user);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Profile fetched successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   createBrand,
   createInfluencer,
+  getProfile,
 };
