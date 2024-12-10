@@ -4,6 +4,7 @@ import { AuthRoutes } from '../modules/auth/auth.route';
 import { InfluencerRoute } from '../modules/influencer/influencer.route';
 import { BrandRoutes } from '../modules/brand/brand.route';
 import { PlanRoutes } from '../modules/plan/plan.route';
+import { SubscriptationRoutes } from '../modules/subscriptation/subscriptation.route';
 
 const router = Router();
 
@@ -27,6 +28,10 @@ const modulesRoutes = [
   {
     path: '/plan',
     route: PlanRoutes,
+  },
+  {
+    path: '/subscriptation',
+    route: SubscriptationRoutes,
   },
 ];
 
